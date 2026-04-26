@@ -27,13 +27,13 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alan Ansari — Full-Stack Developer",
+  title: "Alan Ansari — Software Engineer",
   description:
-    "Full-stack developer building fast, thoughtful web interfaces. Currently architecting the frontend at Benefi.",
+    "Software engineer building fast, thoughtful web interfaces.",
   openGraph: {
-    title: "Alan Ansari — Full-Stack Developer",
+    title: "Alan Ansari — Software Engineer",
     description:
-      "Full-stack developer building fast, thoughtful web interfaces. Currently architecting the frontend at Benefi.",
+      "Software engineer building fast, thoughtful web interfaces.",
     type: "website",
   },
   metadataBase: new URL("https://devalan.in"),
