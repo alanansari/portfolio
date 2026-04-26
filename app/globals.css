@@ -1,0 +1,578 @@
+@import "tailwindcss";
+@config "../tailwind.config.mjs";
+
+/* ---------- Design tokens (ported verbatim from the handoff's tokens.css) ---------- */
+:root {
+  --accent-h: 311;
+  /* LeetCode heatmap ramp (separate hue from GitHub / site accent) */
+  --lc-heat-h: 152;
+  --accent: oklch(0.62 0.22 var(--accent-h));
+  --accent-soft: oklch(0.62 0.22 var(--accent-h) / 0.12);
+  --accent-ring: oklch(0.62 0.22 var(--accent-h) / 0.35);
+  --accent-contrast: #fff;
+
+  /* Light */
+  --bg: oklch(0.995 0.002 280);
+  --bg-elev: oklch(0.985 0.003 280);
+  --bg-sunk: oklch(0.975 0.004 280);
+  --fg: oklch(0.18 0.01 280);
+  --fg-mute: oklch(0.48 0.01 280);
+  --fg-faint: oklch(0.68 0.01 280);
+  --border: oklch(0.92 0.005 280);
+  --border-strong: oklch(0.86 0.008 280);
+  --hairline: oklch(0.94 0.004 280);
+
+  --shadow-sm: 0 1px 2px rgba(15, 15, 25, 0.04), 0 1px 1px rgba(15, 15, 25, 0.03);
+  --shadow-md: 0 4px 12px -4px rgba(15, 15, 25, 0.08), 0 2px 4px rgba(15, 15, 25, 0.04);
+  --shadow-lg: 0 20px 40px -20px rgba(15, 15, 25, 0.18), 0 8px 16px -8px rgba(15, 15, 25, 0.08);
+  --shadow-glow: 0 20px 60px -20px oklch(0.62 0.22 var(--accent-h) / 0.28);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme="dark"] {
+  --bg: oklch(0.16 0.008 280);
+  --bg-elev: oklch(0.2 0.009 280);
+  --bg-sunk: oklch(0.13 0.008 280);
+  --fg: oklch(0.97 0.003 280);
+  --fg-mute: oklch(0.68 0.01 280);
+  --fg-faint: oklch(0.48 0.01 280);
+  --border: oklch(0.26 0.01 280);
+  --border-strong: oklch(0.34 0.012 280);
+  --hairline: oklch(0.22 0.008 280);
+
+  --accent: oklch(0.72 0.2 var(--accent-h));
+  --accent-soft: oklch(0.72 0.2 var(--accent-h) / 0.14);
+  --accent-ring: oklch(0.72 0.2 var(--accent-h) / 0.4);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px -4px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 40px -20px rgba(0, 0, 0, 0.7), 0 8px 16px -8px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 20px 60px -20px oklch(0.72 0.2 var(--accent-h) / 0.4);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1.5;
+  font-feature-settings: "ss01", "cv11";
+  transition: background 0.4s var(--ease-soft), color 0.4s var(--ease-soft);
+  overflow-x: hidden;
+}
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    font-family: inherit;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+  }
+}
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ---------- Component classes (shared visual language) ---------- */
+@layer components {
+  .serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2 rounded px-4 py-[10px] text-sm font-medium transition-all duration-200 ease-soft;
+    border: 1px solid transparent;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border-color: var(--border);
+  }
+  .btn-ghost:hover {
+    background: var(--bg-elev);
+    border-color: var(--border-strong);
+  }
+  .btn-accent {
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .chip {
+    @apply inline-flex items-center;
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 450;
+    background: var(--bg-sunk);
+    color: var(--fg-mute);
+    border: 1px solid var(--hairline);
+    transition: all 0.15s var(--ease-soft);
+  }
+  .chip:hover {
+    color: var(--fg);
+    border-color: var(--border-strong);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--bg-elev);
+    color: var(--fg-mute);
+    border: 1px solid var(--border);
+  }
+}
+
+/* ---------- Animations ---------- */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2s infinite;
+}
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-40px, 30px) scale(1.15);
+  }
+}
+.animate-drift {
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+/* ---------- Theme toggle (segmented sun / moon) ---------- */
+.theme-toggle {
+  position: relative;
+  width: 56px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 2px;
+}
+.theme-toggle__symbols {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+.theme-toggle__symbol {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  color: var(--fg-mute);
+  opacity: 0.5;
+}
+.theme-toggle__slider {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--fg);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 2px rgba(15, 15, 25, 0.12);
+  transition: transform 0.35s var(--ease);
+  transform: translateX(0);
+}
+:root[data-theme="dark"] .theme-toggle__slider {
+  /* 22px thumb + 4px gap */
+  transform: translateX(26px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ---------- Hero visuals ---------- */
+.hero-dots {
+  /* Neutral gray dots; alpha + mask were stacking too faint — keep L in a readable range per theme */
+  --hero-dot: oklch(0.22 0 0 / 0.5);
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, var(--hero-dot) 1px, transparent 0);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 75% 60% at 78% 48%, rgba(0, 0, 0, 0.88), transparent 62%);
+  pointer-events: none;
+  opacity: 1;
+  transition: transform 0.4s var(--ease);
+}
+:root[data-theme="dark"] .hero-dots {
+  /* Lighter neutral so dots read on near-black hero bg */
+  --hero-dot: oklch(0.74 0 0 / 0.38);
+}
+.hero-blob {
+  position: absolute;
+  right: -10%;
+  top: 30%;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-ring), transparent 80%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+/* ---------- Project vizzes ---------- */
+.viz-buzrr {
+  background: radial-gradient(ellipse 40% 50% at 70% 30%, var(--accent-soft), transparent 60%),
+    linear-gradient(135deg, oklch(0.62 0.22 var(--accent-h) / 0.06), var(--bg-sunk));
+  display: grid;
+  place-items: center;
+}
+.viz-buzrr .bolt {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 96px;
+  color: var(--accent);
+  opacity: 0.85;
+  transform: rotate(-8deg);
+  transition: transform 0.4s var(--ease);
+}
+.proj-card:hover .viz-buzrr .bolt {
+  transform: rotate(0deg) scale(1.05);
+}
+.viz-buzrr .players {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 5px;
+  padding: 18px;
+  align-items: end;
+}
+.viz-buzrr .bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: oklch(0.62 0.22 var(--accent-h) / 0.4);
+  transition: height 0.6s var(--ease);
+}
+
+.viz-benefi {
+  background: linear-gradient(145deg, oklch(0.95 0.02 var(--accent-h)), var(--bg-sunk));
+  overflow: hidden;
+}
+:root[data-theme="dark"] .viz-benefi {
+  background: linear-gradient(145deg, oklch(0.22 0.02 var(--accent-h)), var(--bg-sunk));
+}
+.viz-benefi .chart-line {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  height: 60%;
+}
+.viz-benefi .dollar {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  font-family: var(--font-serif);
+  font-size: 62px;
+  color: var(--fg-mute);
+  line-height: 1;
+}
+.viz-benefi .pct {
+  position: absolute;
+  bottom: 18px;
+  left: 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-mute);
+  letter-spacing: 0.04em;
+}
+
+.viz-jsgamez {
+  background: var(--bg-sunk);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  padding: 0;
+}
+.viz-jsgamez .cell {
+  border: 1px solid var(--hairline);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fg-faint);
+  transition: all 0.3s var(--ease-soft);
+}
+.proj-card:hover .viz-jsgamez .cell.on {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.viz-samriddhi {
+  background: conic-gradient(from 180deg at 50% 50%,
+    var(--accent-soft), oklch(0.62 0.22 var(--accent-h) / 0.35),
+    var(--accent-soft), transparent, var(--accent-soft));
+  display: grid;
+  place-items: center;
+}
+.viz-samriddhi .heart {
+  width: 80px;
+  height: 80px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  color: var(--accent);
+  font-style: italic;
+  transition: transform 0.3s var(--ease-soft);
+}
+.proj-card:hover .viz-samriddhi .heart {
+  transform: scale(1.08);
+}
+
+/* ---------- Combined GitHub + LeetCode heatmap (one grid, shared cells) ---------- */
+.contrib-heatmap-scroll {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  /* Fallbacks if inline vars missing; Now.tsx sets both from activityGridWeeksUtc() */
+  --activity-weeks: 35;
+  --activity-rows: 7;
+}
+.contrib-combo {
+  --activity-cell-gap: 1px;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-auto-flow: row;
+  /* Floor cell size so many columns stay legible; parent scrolls horizontally if needed */
+  grid-template-columns: repeat(
+    var(--activity-weeks),
+    minmax(var(--activity-cell-min, 2.5px), 1fr)
+  );
+  /* minmax(1px,1fr): rows with no items must still consume height (min 0 lets them collapse). */
+  grid-template-rows: repeat(var(--activity-rows, 7), minmax(1px, 1fr));
+  gap: var(--activity-cell-gap);
+  /* aspect-ratio set inline on .contrib-combo (Now.tsx) so layout stays 7 rows reliably */
+}
+.contrib-month-ticks {
+  --activity-cell-gap: 1px;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(
+    var(--activity-weeks),
+    minmax(var(--activity-cell-min, 3px), 1fr)
+  );
+  gap: var(--activity-cell-gap);
+  margin-top: 5px;
+  padding-top: 2px;
+  border-top: 1px solid var(--hairline);
+}
+.contrib-month-ticks span {
+  min-width: 0;
+  text-align: center;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 8px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--fg-faint);
+}
+.contrib-combo .sq-combo {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--bg-sunk);
+  overflow: hidden;
+  transition: transform 0.18s var(--ease-soft);
+}
+.contrib-combo .sq-combo:hover {
+  transform: scale(1.28);
+  z-index: 2;
+}
+/* GitHub-only / LeetCode-only: color lives on the grid item (.sq-combo--gh / --lc), never
+   position:absolute on the item (that broke grid track sizing). Split cells: two in-flow
+   layers in one grid cell via grid-area stack — no absolute. */
+.contrib-combo .sq-combo--both {
+  display: grid;
+  grid-template: 1fr / 1fr;
+}
+.contrib-combo .sq-combo--both > .sq-gh,
+.contrib-combo .sq-combo--both > .sq-lc {
+  grid-area: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  display: block;
+}
+.contrib-combo .sq-combo--both .sq-gh {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.contrib-combo .sq-combo--both .sq-lc {
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+/* Translucent ramps over .sq-combo’s bg-sunk — avoids color-mix+var() being dropped
+   (then every non-empty day looked like peak accent = one solid block). */
+.contrib-combo .sq-combo--gh.l1,
+.contrib-combo .sq-combo--both .sq-gh.l1 {
+  background: oklch(0.62 0.22 var(--accent-h) / 0.36);
+}
+.contrib-combo .sq-combo--gh.l2,
+.contrib-combo .sq-combo--both .sq-gh.l2 {
+  background: oklch(0.62 0.22 var(--accent-h) / 0.55);
+}
+.contrib-combo .sq-combo--gh.l3,
+.contrib-combo .sq-combo--both .sq-gh.l3 {
+  background: oklch(0.62 0.22 var(--accent-h) / 0.78);
+}
+.contrib-combo .sq-combo--gh.l4,
+.contrib-combo .sq-combo--both .sq-gh.l4 {
+  background: var(--accent);
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--gh.l1,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-gh.l1 {
+  background: oklch(0.72 0.2 var(--accent-h) / 0.36);
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--gh.l2,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-gh.l2 {
+  background: oklch(0.72 0.2 var(--accent-h) / 0.55);
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--gh.l3,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-gh.l3 {
+  background: oklch(0.72 0.2 var(--accent-h) / 0.78);
+}
+/* Opaque greens — translucent layers on purple-tinted bg-sunk killed hue 152. */
+.contrib-combo .sq-combo--lc.l1,
+.contrib-combo .sq-combo--both .sq-lc.l1 {
+  background: oklch(0.87 0.09 var(--lc-heat-h));
+}
+.contrib-combo .sq-combo--lc.l2,
+.contrib-combo .sq-combo--both .sq-lc.l2 {
+  background: oklch(0.76 0.12 var(--lc-heat-h));
+}
+.contrib-combo .sq-combo--lc.l3,
+.contrib-combo .sq-combo--both .sq-lc.l3 {
+  background: oklch(0.62 0.15 var(--lc-heat-h));
+}
+.contrib-combo .sq-combo--lc.l4,
+.contrib-combo .sq-combo--both .sq-lc.l4 {
+  background: oklch(0.48 0.19 var(--lc-heat-h));
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--lc.l1,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-lc.l1 {
+  background: oklch(0.34 0.08 var(--lc-heat-h));
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--lc.l2,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-lc.l2 {
+  background: oklch(0.44 0.11 var(--lc-heat-h));
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--lc.l3,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-lc.l3 {
+  background: oklch(0.54 0.14 var(--lc-heat-h));
+}
+:root[data-theme="dark"] .contrib-combo .sq-combo--lc.l4,
+:root[data-theme="dark"] .contrib-combo .sq-combo--both .sq-lc.l4 {
+  background: oklch(0.66 0.15 var(--lc-heat-h));
+}
+
+/* ---------- Carousel helper (hide scrollbar) ---------- */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
