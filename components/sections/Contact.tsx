@@ -56,6 +56,7 @@ export function Contact({ socials, stats }: Props) {
     setResult("Sending...");
 
     const formData = new FormData(form);
+    formData.delete("g-recaptcha-response");
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
     if (captchaToken) formData.set("h-captcha-response", captchaToken);
 
