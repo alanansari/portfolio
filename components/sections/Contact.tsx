@@ -9,7 +9,10 @@ import type { Social, Stats } from "@/sanity/types";
 
 type Props = { socials: Social[]; stats: Stats };
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
-const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be4";
+const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY ?? "";
+if (!HCAPTCHA_SITE_KEY) {
+  throw new Error("NEXT_PUBLIC_HCAPTCHA_SITE_KEY is not set");
+}
 const IS_DEV = process.env.NODE_ENV === "development";
 
 const numberFormat = new Intl.NumberFormat("en-US");
