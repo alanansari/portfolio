@@ -57,7 +57,7 @@ export function Contact({ socials, stats }: Props) {
 
     const formData = new FormData(form);
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-    if (captchaToken) formData.append("h-captcha-response", captchaToken);
+    if (captchaToken) formData.set("h-captcha-response", captchaToken);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
