@@ -184,6 +184,7 @@ export function Contact({ socials, stats }: Props) {
               <HCaptcha
                 sitekey={HCAPTCHA_SITE_KEY}
                 onVerify={setCaptchaToken}
+                reCaptchaCompat={false}
                 ref={captchaRef}
                 theme={theme}
               />
