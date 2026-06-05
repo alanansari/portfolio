@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, type SubmitEventHandler } from "react";
+import { useState, useRef, useEffect, type SubmitEventHandler } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -32,7 +32,10 @@ export function Contact({ socials, stats }: Props) {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const captchaRef = useRef<HCaptcha>(null);
+
+  useEffect(() => setMounted(true), []);
 
   const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -173,7 +176,7 @@ export function Contact({ socials, stats }: Props) {
                 className="min-h-[90px] w-full resize-y border-0 border-b border-border bg-transparent py-2 font-sans text-sm outline-none transition-colors duration-200 ease-soft focus:border-(--accent)"
               />
             </Field>
-            {!IS_DEV && (
+            {!IS_DEV && mounted && (
               <HCaptcha
                 sitekey={HCAPTCHA_SITE_KEY}
                 onVerify={setCaptchaToken}
@@ -183,7 +186,7 @@ export function Contact({ socials, stats }: Props) {
             )}
             <button
               type="submit"
-              disabled={isSubmitting || (!IS_DEV && !captchaToken)}
+              disabled={isSubmitting || (!IS_DEV && (!mounted || !captchaToken))}
               className="btn btn-accent mt-1.5 self-start disabled:opacity-75"
             >
               {isSubmitting ? "Sending..." : "Send message →"}
