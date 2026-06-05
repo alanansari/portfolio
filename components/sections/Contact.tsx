@@ -1,27 +1,38 @@
 "use client";
 
-import { useState, type SubmitEventHandler } from "react";
+import { useState, useRef, type SubmitEventHandler } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { useTheme } from "@/components/ThemeProvider";
 import type { Social, Stats } from "@/sanity/types";
 
 type Props = { socials: Social[]; stats: Stats };
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
+const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be4";
+const IS_DEV = process.env.NODE_ENV === "development";
+
+const numberFormat = new Intl.NumberFormat("en-US");
 
 function githubStatsLine(g: Stats["github"]) {
-  return `${g.commits.toLocaleString()} contrib. · ${g.repos} repos · ${g.prsMerged} PRs merged`;
+  return `${numberFormat.format(g.commits)} contrib. · ${g.repos} repos · ${g.prsMerged} PRs merged`;
 }
 
 function leetcodeStatsLine(lc: Stats["leetcode"]) {
-  const r = lc.rating != null ? lc.rating.toLocaleString() : "Unrated";
+  const r = lc.rating != null ? numberFormat.format(lc.rating) : "Unrated";
   const rank =
-    lc.globalRanking != null ? `#${lc.globalRanking.toLocaleString()} global` : "No contest rank";
-  return `${r} peak · ${lc.totalSolved.toLocaleString()} solved · ${rank}`;
+    lc.globalRanking != null
+      ? `#${numberFormat.format(lc.globalRanking)} global`
+      : "No contest rank";
+  return `${r} peak · ${numberFormat.format(lc.totalSolved)} solved · ${rank}`;
 }
 
 export function Contact({ socials, stats }: Props) {
+  const { theme } = useTheme();
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -30,12 +41,17 @@ export function Contact({ socials, stats }: Props) {
       setResult("Missing form configuration.");
       return;
     }
+    if (!IS_DEV && !captchaToken) {
+      setResult("Please complete the captcha.");
+      return;
+    }
 
     setIsSubmitting(true);
     setResult("Sending...");
 
     const formData = new FormData(form);
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+    if (captchaToken) formData.append("h-captcha-response", captchaToken);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -47,11 +63,17 @@ export function Contact({ socials, stats }: Props) {
       if (data.success) {
         setResult("Success!");
         form.reset();
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
       } else {
-        setResult("Error");
+        setResult("Error sending message. Please try again.");
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
       }
     } catch {
-      setResult("Error");
+      setResult("Error sending message. Please try again.");
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -151,9 +173,17 @@ export function Contact({ socials, stats }: Props) {
                 className="min-h-[90px] w-full resize-y border-0 border-b border-border bg-transparent py-2 font-sans text-sm outline-none transition-colors duration-200 ease-soft focus:border-(--accent)"
               />
             </Field>
+            {!IS_DEV && (
+              <HCaptcha
+                sitekey={HCAPTCHA_SITE_KEY}
+                onVerify={setCaptchaToken}
+                ref={captchaRef}
+                theme={theme}
+              />
+            )}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || (!IS_DEV && !captchaToken)}
               className="btn btn-accent mt-1.5 self-start disabled:opacity-75"
             >
               {isSubmitting ? "Sending..." : "Send message →"}
