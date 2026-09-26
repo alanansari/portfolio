@@ -21,7 +21,7 @@ export function Now({ profile, stats, socials }: Props) {
       className="relative border-b border-hairline px-5 py-16 sm:px-7 sm:py-20 md:px-20 md:py-[120px]"
       style={{ background: "var(--bg-sunk)" }}
     >
-      <SectionHead number="02 / NOW" title="What I'm building right now" />
+      <SectionHead number="05 / NOW" title="What I'm building right now" />
 
       <Reveal>
         <div
@@ -68,22 +68,24 @@ export function Now({ profile, stats, socials }: Props) {
               </div>
               <ActivityMonthTicks weeks={activityWeeks} />
             </div>
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-[0.08em] text-fg-faint">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-sm bg-accent/45" />
-                GitHub
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span
-                  className="h-2 w-2 rounded-sm"
-                  style={{ background: "oklch(0.62 0.15 var(--lc-heat-h))" }}
-                />
-                LeetCode
-              </span>
-              <span className="max-w-[260px] text-[9px] normal-case leading-snug tracking-normal text-fg-mute/85">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.08em] text-fg-mute">
+              <span className="max-w-[260px] text-[9px] normal-case leading-snug tracking-normal text-fg-mute">
                 One day per square; Both active → diagonal (GitHub top-left, LeetCode
                 bottom-right).
               </span>
+              <div className="ml-auto flex items-center gap-x-4">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-3 w-3 shrink-0 rounded-[2px] bg-accent/45" />
+                  GitHub
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span
+                    className="h-3 w-3 shrink-0 rounded-[2px]"
+                    style={{ background: "oklch(0.62 0.15 var(--lc-heat-h))" }}
+                  />
+                  LeetCode
+                </span>
+              </div>
             </div>
             <div className="mt-4 min-w-0 space-y-4 border-t border-hairline pt-4">
               <div className="min-w-0">

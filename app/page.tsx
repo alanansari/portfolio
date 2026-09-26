@@ -33,10 +33,10 @@ export default async function HomePage() {
       <main className="max-w-full overflow-x-hidden lg:min-w-0">
         <Hero profile={profile} />
         <About profile={profile} />
-        <Now profile={profile} stats={statsForNow} socials={socials} />
         <Experience items={experience} />
         <Skills items={skills} />
         <Projects items={projects} />
+        <Now profile={profile} stats={statsForNow} socials={socials} />
         <Contact socials={socials} stats={statsForNow} />
         <Footer />
       </main>

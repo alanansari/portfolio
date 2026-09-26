@@ -13,10 +13,10 @@ type Props = { profile: Profile };
 const NAV_SECTIONS = [
   { id: "hero", label: "Overview", num: "00" },
   { id: "about", label: "About", num: "01" },
-  { id: "now", label: "Now", num: "02" },
-  { id: "experience", label: "Experience", num: "03" },
-  { id: "skills", label: "Skills", num: "04" },
-  { id: "projects", label: "Projects", num: "05" },
+  { id: "experience", label: "Experience", num: "02" },
+  { id: "skills", label: "Skills", num: "03" },
+  { id: "projects", label: "Projects", num: "04" },
+  { id: "now", label: "Now", num: "05" },
   { id: "contact", label: "Contact", num: "06" },
 ];
 

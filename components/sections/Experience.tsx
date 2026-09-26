@@ -11,7 +11,7 @@ export function Experience({ items }: Props) {
       id="experience"
       className="relative border-b border-hairline px-5 py-16 sm:px-7 sm:py-20 md:px-20 md:py-[120px]"
     >
-      <SectionHead number="03 / EXPERIENCE" title="Where I've worked" />
+      <SectionHead number="02 / EXPERIENCE" title="Where I've worked" />
 
       <div className="relative pl-7">
         <div

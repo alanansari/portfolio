@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect, type SubmitEventHandler } from "react";
+import { useState, useRef, useSyncExternalStore, type SubmitEventHandler } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { useTheme } from "@/components/ThemeProvider";
 import type { Social, Stats } from "@/sanity/types";
+
+const noopSubscribe = () => () => {};
 
 type Props = { socials: Social[]; stats: Stats };
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
@@ -35,10 +37,9 @@ export function Contact({ socials, stats }: Props) {
   const [result, setResult] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  // true on the client, false during SSR — gates the captcha widget without a setState-in-effect.
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const captchaRef = useRef<HCaptcha>(null);
-
-  useEffect(() => setMounted(true), []);
 
   const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -56,7 +57,6 @@ export function Contact({ socials, stats }: Props) {
     setResult("Sending...");
 
     const formData = new FormData(form);
-    formData.delete("g-recaptcha-response");
     formData.append("access_key", WEB3FORMS_ACCESS_KEY);
     if (captchaToken) formData.set("h-captcha-response", captchaToken);
 
@@ -89,7 +89,7 @@ export function Contact({ socials, stats }: Props) {
   return (
     <section
       id="contact"
-      className="relative border-b border-hairline px-5 py-16 sm:px-7 sm:py-20 md:px-20 md:py-[120px]"
+      className="relative border-b border-hairline px-5 py-16 sm:px-7 sm:py-20 md:px-20 md:py-30"
       style={{ background: "var(--bg-sunk)" }}
     >
       <SectionHead number="06 / CONTACT" title="Say hi" />
@@ -108,7 +108,7 @@ export function Contact({ socials, stats }: Props) {
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
-            <p className="m-0 mb-8 max-w-[420px] text-[15px] leading-[1.55] text-fg-mute">
+            <p className="m-0 mb-8 max-w-105 text-[15px] leading-[1.55] text-fg-mute">
               Open to full-stack roles, interesting contracts, or just a good conversation about
               shipping web software.
             </p>
@@ -177,7 +177,7 @@ export function Contact({ socials, stats }: Props) {
                 name="message"
                 required
                 placeholder="What's on your mind?"
-                className="min-h-[90px] w-full resize-y border-0 border-b border-border bg-transparent py-2 font-sans text-sm outline-none transition-colors duration-200 ease-soft focus:border-(--accent)"
+                className="min-h-22.5 w-full resize-y border-0 border-b border-border bg-transparent py-2 font-sans text-sm outline-none transition-colors duration-200 ease-soft focus:border-(--accent)"
               />
             </Field>
             {!IS_DEV && mounted && (

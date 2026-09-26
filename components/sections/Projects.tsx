@@ -48,7 +48,7 @@ export function Projects({ items }: Props) {
       <div className="mb-8 flex items-end justify-between gap-5">
         <Reveal className="flex-1">
           <div className="flex items-baseline gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-fg-faint">05 / PROJECTS</span>
+            <span className="font-mono text-[11px] uppercase tracking-widest text-fg-faint">04 / PROJECTS</span>
             <span className="text-[13px] font-medium text-fg">Things I&apos;ve built</span>
             <span className="h-px flex-1 bg-hairline" />
           </div>

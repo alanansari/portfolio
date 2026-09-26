@@ -11,7 +11,7 @@ export function Skills({ items }: Props) {
       id="skills"
       className="relative border-b border-hairline px-5 py-16 sm:px-7 sm:py-20 md:px-20 md:py-[120px]"
     >
-      <SectionHead number="04 / SKILLS" title="Tools I reach for" />
+      <SectionHead number="03 / SKILLS" title="Tools I reach for" />
 
       <div className="grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(220px,1fr))] items-stretch gap-4">
         {items.map((cat, i) => (
